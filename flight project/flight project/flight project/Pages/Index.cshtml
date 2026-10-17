@@ -1,0 +1,289 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "BMW Flights | Premium Sky Mobility";
+}
+
+<!-- Styling & Theme Variables -->
+<style>
+    :root {
+        --bmw-blue: #0066B1;
+        --bmw-dark: #0a0c0f;
+        --bmw-card-bg: rgba(20, 24, 33, 0.85);
+        --bmw-accent: #3399ff;
+        --bmw-border: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+        background-color: var(--bmw-dark);
+        color: #e2e8f0;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Hero Banner */
+    .hero-container {
+        position: relative;
+        padding: 5rem 0 3rem 0;
+        background: radial-gradient(circle at 50% 20%, rgba(0, 102, 177, 0.2) 0%, transparent 70%),
+                    linear-gradient(180deg, rgba(10, 12, 15, 0.6) 0%, var(--bmw-dark) 100%);
+    }
+
+    /* Tabbed Search Card */
+    .search-card {
+        background: var(--bmw-card-bg);
+        border: 1px solid var(--bmw-border);
+        border-radius: 20px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .nav-pills .nav-link {
+        color: #a0aec0;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 0.5rem 1.25rem;
+        transition: all 0.2s;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: var(--bmw-blue);
+        color: #ffffff;
+        box-shadow: 0 0 15px rgba(0, 102, 177, 0.5);
+    }
+
+    .form-dark {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #ffffff !important;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+    }
+
+    .form-dark:focus {
+        border-color: var(--bmw-accent) !important;
+        box-shadow: 0 0 10px rgba(51, 153, 255, 0.3) !important;
+    }
+
+    .form-dark option {
+        background-color: #141821;
+        color: #fff;
+    }
+
+    /* Buttons */
+    .btn-bmw {
+        background: linear-gradient(135deg, #0066B1 0%, #004488 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-bmw:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 102, 177, 0.4);
+        color: white;
+    }
+
+    /* Fleet Cards */
+    .fleet-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--bmw-border);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .fleet-card:hover {
+        border-color: var(--bmw-blue);
+        transform: translateY(-6px);
+        box-shadow: 0 15px 30px rgba(0, 102, 177, 0.15);
+    }
+
+    .fleet-badge {
+        background: rgba(0, 102, 177, 0.2);
+        color: var(--bmw-accent);
+        border: 1px solid rgba(0, 102, 177, 0.3);
+    }
+
+    /* Departure Board Table */
+    .departure-table {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 16px;
+        border: 1px solid var(--bmw-border);
+    }
+
+    .departure-table th {
+        color: #718096;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-container">
+    <div class="container">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge fleet-badge px-3 py-2 text-uppercase rounded-pill mb-3">BMW Luxury Aviation</span>
+            <h1 class="display-4 fw-bold text-white mb-3">fly in the Sky</h1>
+            <p class="lead text-secondary">Experience bespoke air travel, private terminal access, and luxury ground transfer with BMW Flights.</p>
+        </div>
+
+        <!-- Search Card with Tabs -->
+        <div class="search-card p-4 p-md-5 mx-auto" style="max-width: 1050px;">
+            <!-- Trip Type Tabs -->
+            <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-roundtrip-tab" data-bs-toggle="pill" data-bs-target="#pills-roundtrip" type="button" role="tab">Round Trip</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-oneway-tab" data-bs-toggle="pill" data-bs-target="#pills-oneway" type="button" role="tab">One Way</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-private-tab" data-bs-toggle="pill" data-bs-target="#pills-private" type="button" role="tab">Private Jet Charter</button>
+                </li>
+            </ul>
+
+            <!-- Flight Search Form -->
+            <form method="get" asp-page="/Index" class="row g-3 align-items-end">
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label text-light small fw-bold text-uppercase">Origin</label>
+                    <input type="text" name="Origin" class="form-control form-dark" placeholder="e.g. Munich (MUC)" required />
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label text-light small fw-bold text-uppercase">Destination</label>
+                    <input type="text" name="Destination" class="form-control form-dark" placeholder="e.g. New York (JFK)" required />
+                </div>
+
+                <div class="col-lg-2 col-md-4">
+                    <label class="form-label text-light small fw-bold text-uppercase">Departure</label>
+                    <input type="date" name="DepartureDate" class="form-control form-dark" required />
+                </div>
+
+                <div class="col-lg-2 col-md-4">
+                    <label class="form-label text-light small fw-bold text-uppercase">Class</label>
+                    <select name="FlightClass" class="form-select form-dark">
+                        <option value="First">First Class</option>
+                        <option value="Business">Business Suite</option>
+                        <option value="Private">Maahi's personal flight</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2 col-md-4">
+                    <button type="submit" class="btn btn-bmw w-100">
+                        Search Flights
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Fleet / Cabin Showcase -->
+<div class="container my-5 py-4">
+    <div class="text-center mb-5">
+        <span class="badge fleet-badge px-3 py-2 text-uppercase rounded-pill mb-2">Cabin Experience</span>
+        <h2 class="fw-bold text-white">BMW Sky Mobility Fleet</h2>
+    </div>
+
+    <div class="row g-4">
+        <!-- Fleet Item 1 -->
+        <div class="col-md-4">
+            <div class="fleet-card h-100 p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <span class="badge bg-primary mb-3">M-Series Interior</span>
+                    <h4 class="fw-bold text-white mb-2">BMW Sky First</h4>
+                    <p class="text-secondary small leading-relaxed">Fully reclinable suites featuring fine Merino leather seating, personal acoustic zones, and climate control.</p>
+                </div>
+                <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                    <span class="small text-muted">Range: 7,500 nm</span>
+                    <span class="text-info fw-bold">Commercial First</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fleet Item 2 -->
+        <div class="col-md-4">
+            <div class="fleet-card h-100 p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <span class="badge bg-primary mb-3">i-Series Sustainable</span>
+                    <h4 class="fw-bold text-white mb-2">BMW Sky Business</h4>
+                    <p class="text-secondary small leading-relaxed">Designed for productivity in transit with high-speed satellite Wi-Fi, wireless charging, and privacy dividers.</p>
+                </div>
+                <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                    <span class="small text-muted">Range: 5,200 nm</span>
+                    <span class="text-info fw-bold">Business Suite</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fleet Item 3 -->
+        <div class="col-md-4">
+            <div class="fleet-card h-100 p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <span class="badge bg-warning text-dark mb-3">VIP Charter</span>
+                    <h4 class="fw-bold text-white mb-2">BMW Private Jet</h4>
+                    <p class="text-secondary small leading-relaxed">Exclusive charter aircraft equipped with BMW i7 chauffeur terminal transport and direct tarmac access.</p>
+                </div>
+                <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                    <span class="small text-muted">Direct Non-Stop</span>
+                    <span class="text-warning fw-bold">Private Charter</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Live Departure Preview Board -->
+<div class="container my-5 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <span class="badge fleet-badge px-3 py-2 text-uppercase rounded-pill mb-2">Live Status</span>
+            <h3 class="fw-bold text-white mb-0">Featured BMW Routes Today</h3>
+        </div>
+    </div>
+
+    <div class="departure-table p-3 table-responsive">
+        <table class="table table-dark table-hover bg-transparent mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th>Flight</th>
+                    <th>Route</th>
+                    <th>Departure</th>
+                    <th>Cabin</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold text-info">BMW 701</td>
+                    <td>Munich (MUC) &rarr; New York (JFK)</td>
+                    <td>14:30 CET</td>
+                    <td>First Class Suite</td>
+                    <td><span class="badge bg-success">On Time</span></td>
+                    <td class="text-end"><a href="#" class="btn btn-sm btn-outline-light rounded-pill px-3">Select</a></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-info">BMW 882</td>
+                    <td>Frankfurt (FRA) &rarr; Tokyo (HND)</td>
+                    <td>17:15 CET</td>
+                    <td>Business Suite</td>
+                    <td><span class="badge bg-success">On Time</span></td>
+                    <td class="text-end"><a href="#" class="btn btn-sm btn-outline-light rounded-pill px-3">Select</a></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-info">BMW 109</td>
+                    <td>London (LHR) &rarr; Dubai (DXB)</td>
+                    <td>20:00 GMT</td>
+                    <td>VIP Private Jet</td>
+                    <td><span class="badge bg-primary">Boarding</span></td>
+                    <td class="text-end"><a href="#" class="btn btn-sm btn-outline-light rounded-pill px-3">Select</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
